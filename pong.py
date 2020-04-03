@@ -3,6 +3,7 @@
 
 import turtle
 import os
+import time
 
 wn = turtle.Screen()
 wn.title("Pong")
@@ -20,6 +21,7 @@ paddle_a.speed(0)
 paddle_a.shape("square")
 paddle_a.color("white")
 paddle_a.shapesize(stretch_wid=5,stretch_len=1)
+paddle_a.setheading(0)
 paddle_a.penup()
 paddle_a.goto(-350, 0)
 
@@ -29,6 +31,7 @@ paddle_b.speed(0)
 paddle_b.shape("square")
 paddle_b.color("white")
 paddle_b.shapesize(stretch_wid=5,stretch_len=1)
+paddle_b.setheading(0)
 paddle_b.penup()
 paddle_b.goto(350, 0)
 
@@ -75,18 +78,27 @@ def paddle_b_down():
 
 # Keyboard bindings
 wn.listen()
-wn.onkeypress(paddle_a_up, "w")
-wn.onkeypress(paddle_a_down, "s")
 wn.onkeypress(paddle_b_up, "Up")
 wn.onkeypress(paddle_b_down, "Down")
 
 # Main game loop
+count = 0
 while True:
     wn.update()
     
     # Move the ball
     ball.setx(ball.xcor() + ball.dx)
     ball.sety(ball.ycor() + ball.dy)
+    
+    if count % 7 == 0:
+        if paddle_a.ycor() < ball.ycor():
+            paddle_a_up()
+        else:
+            paddle_a_down()
+    
+    count +=1
+
+
 
     # Border checking
 

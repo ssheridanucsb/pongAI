@@ -6,116 +6,130 @@ class Pong:
     def __init__(self, player=0, train=False):
         self.player = player
         self.train = train 
-        self.score_a = 0
-        self.score_b = 0
     
-    def paddle_up(self, paddle):
-        y = paddle.ycor()
-        y += 20
-        paddle.sety(y)
 
-    def paddle_down(self, paddle):
-        y = paddle.ycor()
-        y -= 20
-        paddle.sety(y)
+    def play(self):
+        wn = turtle.Screen()
+        wn.title("Pong")
+        wn.bgcolor("black")
+        wn.setup(width=800, height=600)
+        wn.tracer(0)
 
-    def draw_screen(self):
-        self.wn = turtle.Screen()
-        self.wn.title("Pong")
-        self.wn.bgcolor("black")
-        self.wn.setup(width=800, height=600)
-        self.wn.tracer(0)
-    
-    def draw_paddles(self):
-        #Paddle A
-        self.paddle_a = turtle.Turtle()
-        self.paddle_a.speed(0)
-        self.paddle_a.shape("square")
-        self.paddle_a.color("white")
-        self.paddle_a.shapesize(stretch_wid=5,stretch_len=1)
-        self.paddle_a.penup()
-        self.paddle_a.goto(-350, 0)
+        # Score
+        score_a = 0
+        score_b = 0
+
+        # Paddle A
+        paddle_a = turtle.Turtle()
+        paddle_a.speed(0)
+        paddle_a.shape("square")
+        paddle_a.color("white")
+        paddle_a.shapesize(stretch_wid=5,stretch_len=1)
+        paddle_a.penup()
+        paddle_a.goto(-350, 0)
 
         # Paddle B
-        self.paddle_b = turtle.Turtle()
-        self.paddle_b.speed(0)
-        self.paddle_b.shape("square")
-        self.paddle_b.color("white")
-        self.paddle_b.shapesize(stretch_wid=5,stretch_len=1)
-        self.paddle_b.penup()
-        self.paddle_b.goto(350, 0)
+        paddle_b = turtle.Turtle()
+        paddle_b.speed(0)
+        paddle_b.shape("square")
+        paddle_b.color("white")
+        paddle_b.shapesize(stretch_wid=5,stretch_len=1)
+        paddle_b.penup()
+        paddle_b.goto(350, 0)
 
-    def draw_ball(self):
-          # Ball
-        self.ball = turtle.Turtle()
-        self.ball.speed(0)
-        self.ball.shape("square")
-        self.ball.color("white")
-        self.ball.penup()
-        self.ball.goto(0, 0)
-        self.ball.dx = 2
-        self.ball.dy = 2
-    
-    def draw_pen(self):
-         # Pen
-        self.pen = turtle.Turtle()
-        self.pen.speed(0)
-        self.pen.shape("square")
-        self.pen.color("white")
-        self.pen.self.penup()
-        self.pen.hideturtle()
-        self.pen.goto(0, 260)
-        self.pen.write("Player A: 0  Player B: 0", align="center", font=("Courier", 24, "normal"))
+        # Ball
+        ball = turtle.Turtle()
+        ball.speed(0)
+        ball.shape("square")
+        ball.color("white")
+        ball.penup()
+        ball.goto(0, 0)
+        ball.dx = 2
+        ball.dy = 2
 
+        # Pen
+        pen = turtle.Turtle()
+        pen.speed(0)
+        pen.shape("square")
+        pen.color("white")
+        pen.penup()
+        pen.hideturtle()
+        pen.goto(0, 260)
+        pen.write("Player A: 0  Player B: 0", align="center", font=("Courier", 24, "normal"))
 
+        # Functions
+        def paddle_a_up():
+            y = paddle_a.ycor()
+            y += 20
+            paddle_a.sety(y)
 
+        def paddle_a_down():
+            y = paddle_a.ycor()
+            y -= 20
+            paddle_a.sety(y)
 
+        def paddle_b_up():
+            y = paddle_b.ycor()
+            y += 20
+            paddle_b.sety(y)
 
-    
-    def play(self):
-       self.draw_screend()
-       self.draw_paddles()
-       self.draw_pen()
+        def paddle_b_down():
+            y = paddle_b.ycor()
+            y -= 20
+            paddle_b.sety(y)
 
-       while True:
-            self.wn.update()
+        # Keyboard bindings
+        wn.listen()
+        wn.onkeypress(paddle_a_up, "w")
+        wn.onkeypress(paddle_a_down, "s")
+        wn.onkeypress(paddle_b_up, "Up")
+        wn.onkeypress(paddle_b_down, "Down")
+
+        # Main game loop
+        while True:
+            wn.update()
             
             # Move the ball
-            self.ball.setx(self.ball.xcor() + self.ball.dx)
-            self.ball.sety(self.ball.ycor() + self.ball.dy)
+            ball.setx(ball.xcor() + ball.dx)
+            ball.sety(ball.ycor() + ball.dy)
 
             # Border checking
 
             # Top and bottom
-            if self.ball.ycor() > 290:
-                self.ball.sety(290)
-                self.ball.dy *= -1
+            if ball.ycor() > 290:
+                ball.sety(290)
+                ball.dy *= -1
                 
             
-            elif self.ball.ycor() < -290:
-                self.ball.sety(-290)
-                self.ball.dy *= -1
+            elif ball.ycor() < -290:
+                ball.sety(-290)
+                ball.dy *= -1
                 
 
             # Left and right
-            if self.ball.xcor() > 350:
+            if ball.xcor() > 350:
                 score_a += 1
                 pen.clear()
                 pen.write("Player A: {}  Player B: {}".format(score_a, score_b), align="center", font=("Courier", 24, "normal"))
-                self.ball.goto(0, 0)
-                self.ball.dx *= -1
+                ball.goto(0, 0)
+                ball.dx *= -1
 
-            elif self.ball.xcor() < -350:
+            elif ball.xcor() < -350:
                 score_b += 1
                 pen.clear()
                 pen.write("Player A: {}  Player B: {}".format(score_a, score_b), align="center", font=("Courier", 24, "normal"))
-                self.ball.goto(0, 0)
-                self.ball.dx *= -1
+                ball.goto(0, 0)
+                ball.dx *= -1
 
-            # Paddle and self.ball collisions
-            if self.ball.xcor() < -340 and self.ball.ycor() < self.paddle_a.ycor() + 50 and self.ball.ycor() > self.paddle_a.ycor() - 50:
-                self.ball.dx *= -1 
+            # Paddle and ball collisions
+            if ball.xcor() < -340 and ball.ycor() < paddle_a.ycor() + 50 and ball.ycor() > paddle_a.ycor() - 50:
+                ball.dx *= -1 
                 
             
-            elif self.ball.xcor() > 340 and self.ball.ycor() < self.paddle_b.ycor() + 50 and self.ball.ycor() > self.paddle_b.ycor() - 50:
-                self.ball.dx *= -1
+            elif ball.xcor() > 340 and ball.ycor() < paddle_b.ycor() + 50 and ball.ycor() > paddle_b.ycor() - 50:
+                ball.dx *= -1   
+
+
+if __name__ == "__main__":
+    game = Pong()
+    game.play()
